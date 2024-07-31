@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { AppNavigator } from "./navigation/AppNavigator";
-import AppLoading from "expo-app-loading";
+import * as SplashScreen from 'expo-splash-screen';
 import useFonts from "./hooks/useFonts";
 
-export default function App() {
+function App() {
   const [isReady, setIsReady] = useState(false);
 
-  const loadFonts = async () => {
-    await useFonts();
-  };
+  useEffect(() => {
+    const prepare = async () => {
+      try {
+        await useFonts();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setIsReady(true);
+        SplashScreen.hideAsync();
+      }
+    };
+
+    prepare();
+  }, []);
 
   if (!isReady) {
-    return (
-      <AppLoading
-        startAsync={loadFonts}
-        onFinish={() => setIsReady(true)}
-        onError={(error) => console.warn(error)}
-      />
-    );
+    return null; // Or a custom splash screen component
   }
 
   return (
@@ -27,3 +32,5 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+export default App;
