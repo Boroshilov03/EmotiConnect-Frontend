@@ -4,6 +4,15 @@ import { AppNavigator } from "./navigation/AppNavigator";
 import * as SplashScreen from 'expo-splash-screen';
 import useFonts from "./hooks/useFonts";
 import './core/fontawesome'
+import { DefaultTheme } from "react-native-paper";
+
+const LightTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'white'
+  }
+}
 
 function App() {
   const [isReady, setIsReady] = useState(false);
@@ -28,7 +37,7 @@ function App() {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={LightTheme}>
       <AppNavigator />
     </NavigationContainer>
   );
