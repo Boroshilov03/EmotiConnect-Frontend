@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { AppNavigator } from "./navigation/AppNavigator";
 import * as SplashScreen from 'expo-splash-screen';
 import useFonts from "./hooks/useFonts";
+import './core/fontawesome'
 
 function App() {
   const [isReady, setIsReady] = useState(false);
