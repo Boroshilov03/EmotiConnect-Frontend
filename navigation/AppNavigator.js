@@ -1,18 +1,19 @@
 // navigation/AppNavigator.js
-import React, { useState } from 'react'; // Ensure useState is imported
-import { createStackNavigator } from '@react-navigation/stack';
-import ChatsScreen from '../screens/ChatsScreen';
-import ChatDetailScreen from '../screens/ChatDetailScreen';
-import SplashScreen from '../screens/SplashScreen';
-import SignInScreen from '../screens/SignInScreen';
-import GiftsScreen from '../screens/GiftsScreen';
-import CallsScreen from '../screens/CallsScreen';
-
+import React, { useState } from "react"; // Ensure useState is imported
+import { createStackNavigator } from "@react-navigation/stack";
+import ChatsScreen from "../screens/ChatsScreen";
+import ChatDetailScreen from "../screens/ChatDetailScreen";
+import SplashScreen from "../screens/SplashScreen";
+import SignInScreen from "../screens/SignInScreen";
+import GiftsScreen from "../screens/GiftsScreen";
+import CallsScreen from "../screens/CallsScreen";
+import HomeScreen from "../screens/HomeScreen";
+import CalendarScreen from "../screens/CalendarScreen";
 const Stack = createStackNavigator();
 
 export function AppNavigator() {
-  const [initialized] = useState(false);
-  const [authenticated] = useState(false);
+  const [initialized] = useState(true);
+  const [authenticated] = useState(true);
 
   return (
     <Stack.Navigator>
@@ -22,12 +23,16 @@ export function AppNavigator() {
         <Stack.Screen name="SignIn" component={SignInScreen} />
       ) : (
         <>
-          <Stack.Screen name="Home" component={ChatsScreen} />
-          <Stack.Screen name="ChatDetail" component={ChatDetailScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Chats" component={ChatsScreen} />
           <Stack.Screen name="Gifts" component={GiftsScreen} />
           <Stack.Screen name="Calls" component={CallsScreen} />
+          <Stack.Screen name="ChatDetail" component={ChatDetailScreen} />
+          <Stack.Screen name="Calendar" component={CalendarScreen} />
+
         </>
       )}
     </Stack.Navigator>
+    
   );
 }
