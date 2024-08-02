@@ -9,6 +9,7 @@ const Title = ({ text, color }) => {
         textAlign: "center",
         fontSize: 52,
         fontFamily: "OleoScriptSwashCaps-Regular",
+        marginBottom: 12,
       }}
     >
       {text}
