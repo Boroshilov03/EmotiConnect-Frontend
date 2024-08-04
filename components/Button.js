@@ -1,30 +1,30 @@
-import {Text,TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity } from "react-native";
 
-function Button({ title }) {
-    return (
-      <TouchableOpacity
+function Button({ title, onPress }) {
+  return (
+    <TouchableOpacity
+      style={{
+        marginTop: 30,
+        backgroundColor: "pink",
+        borderRadius: 26,
+        height: 52,
+        fontSize: 16,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      onPress={onPress}
+    >
+      <Text
         style={{
-          marginTop: 30,
-          backgroundColor: "pink",
-          borderRadius: 26,
-          height: 52,
+          color: "white",
           fontSize: 16,
-          justifyContent: "center",
-          alignItems: "center",
+          fontWeight: "bold",
         }}
       >
-        <Text
-          style={{
-            color: "white",
-            fontSize: 16,
-            fontWeight: "bold",
-          }}
-        >
-          {title}
-        </Text>
-      </TouchableOpacity>
-    );
-  }
-  
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+}
 
-  export default Button
+export default Button;

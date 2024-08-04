@@ -32,7 +32,7 @@ function HomeScreen({ navigation }) {
           const icon = icons[route.name];
           return <FontAwesomeIcon icon={icon} size={28} color={color} />;
         },
-        tabBarActiveTintColor: 'rgba(214, 151, 214, 0.7)'
+        tabBarActiveTintColor: 'pink'
         // tabBarActiveTintColor: '#d697d6',
         // tabBarInactiveTintColor: '#ffffff',
         // tabBarStyle: {
