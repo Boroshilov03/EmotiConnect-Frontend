@@ -12,6 +12,7 @@ import React, { useLayoutEffect, useState } from "react";
 import Title from "../components/Title";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import api from "../core/api";
 
 export default function SignInScreen({ navigation }) {
   function onSignIn() {
@@ -32,6 +33,29 @@ export default function SignInScreen({ navigation }) {
       return;
     }
     //Make signIn request
+    api({
+      method: "POST",
+      url: "/chat/signin/",
+      data: {
+        username: username,
+        password: password,
+      },
+    })
+      .then((response) => {
+        console.log('Sign In:', response.data);
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error", error.message);
+        }
+        console.log(error.config);
+      });
   }
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

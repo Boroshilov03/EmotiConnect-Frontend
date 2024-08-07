@@ -19,6 +19,7 @@
     "@react-navigation/material-bottom-tabs": "^6.2.29",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
+    "axios": "^1.7.3",
     "expo": "~51.0.23",
     "expo-app-loading": "^2.1.1",
     "expo-splash-screen": "~0.27.5",
