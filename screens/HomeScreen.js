@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView } from "react-native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { StyleSheet } from "react-native";
 import React, { useLayoutEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { BlurView } from "expo-blur";
 
 import GiftsScreen from "../screens/GiftsScreen";
 import CallsScreen from "../screens/CallsScreen";
@@ -22,31 +22,37 @@ function HomeScreen({ navigation }) {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ color, size }) => {
           const icons = {
-            Gifts: 'gift',
-            Chats: 'fa-brands fa-rocketchat',
-            Calls: 'phone',
-            Calendar: 'calendar-days'
+            Gifts: "gift",
+            Chats: "fa-brands fa-rocketchat",
+            Calls: "phone",
+            Calendar: "calendar-days",
           };
           const icon = icons[route.name];
-          return <FontAwesomeIcon icon={icon} size={28} color={color} />;
+          return <FontAwesomeIcon icon={icon} size={25} color={color} />;
         },
-        tabBarActiveTintColor: 'pink'
-        // tabBarActiveTintColor: '#d697d6',
-        // tabBarInactiveTintColor: '#ffffff',
-        // tabBarStyle: {
-        //   backgroundColor: 'rgba(214, 151, 214, 0.7)', // Light pink color with transparency
-        //   borderTopWidth: 0,
-        //   elevation: 0,
-        //   position: 'absolute',
-        //   bottom: 20,
-        //   left: 20,
-        //   right: 20,
-        //   borderRadius: 20,
-        //   height: 70,
-        //   paddingBottom: 10,
-        // },
+        tabBarActiveTintColor: "pink",
+        tabBarStyle: {
+          position: 'absolute',
+          height: 50,
+          backgroundColor: 'transparent',
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          overflow: 'hidden',
+          borderTopWidth: 0, // Ensure no top border is applied
+          elevation: 0, // Remove shadow on Android
+          shadowOpacity: 0, // Remove shadow on iOS
+        },
+        tabBarBackground: () => (
+          <BlurView
+            intensity={65}
+            tint="light"
+            style={{
+              ...StyleSheet.absoluteFillObject,
+            }}
+          />
+        ),
       })}
     >
       <Tab.Screen name="Gifts" component={GiftsScreen} />

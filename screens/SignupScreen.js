@@ -5,11 +5,16 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
+  Image,
+  Alert,
+  ScrollView,
+  StyleSheet,
 } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Title from "../components/Title";
+import * as ImagePicker from "expo-image-picker";
 
 export default function SignupScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -17,6 +22,7 @@ export default function SignupScreen({ navigation }) {
   const [lastname, setLastname] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
   const [usernameError, setUsernameError] = useState("");
   const [firstnameError, setFirstnameError] = useState("");
@@ -30,36 +36,47 @@ export default function SignupScreen({ navigation }) {
     });
   }, []);
 
+  async function pickImage() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfilePhoto(result.assets[0].uri);
+    }
+  }
+
   function onSignUp() {
     console.log("onSign Up");
 
-    //Check username
     const failUsername = !username || username.length < 5;
     if (failUsername) {
-      setUsernameError("Username must be atleast 5 characters long");
+      setUsernameError("Username must be at least 5 characters long");
     }
-    //Check firstName
+
     const failFirstName = !firstname;
     if (failFirstName) {
       setFirstnameError("First Name not provided");
     }
-    //Check lastName
+
     const failLastName = !lastname;
     if (failLastName) {
       setLastnameError("Last Name not provided");
     }
-    //Check password1
-    const failPassword1 = !password1 || password1 < 8;
+
+    const failPassword1 = !password1 || password1.length < 8;
     if (failPassword1) {
-      setPassword1Error("Password must be atleast 8 characters long");
+      setPassword1Error("Password must be at least 8 characters long");
     }
 
-    //Check password2
-    const failPassword2 = !password2;
+    const failPassword2 = password1 !== password2;
     if (failPassword2) {
       setPassword2Error("Passwords do not match");
     }
-    //Break out of this function if there were any issues
+
     if (
       failUsername ||
       failFirstName ||
@@ -69,17 +86,46 @@ export default function SignupScreen({ navigation }) {
     ) {
       return;
     }
-    //Make signIn request
+
+    // Make sign-up request
+    console.log("Signing up with", {
+      username,
+      firstname,
+      lastname,
+      password1,
+      profilePhoto,
+    });
   }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View
-            style={{ flex: 1, justifyContent: "center", paddingHorizontal: 16 }}
-          >
+          <ScrollView contentContainerStyle={styles.scrollView}>
             <Title text="EmotiConnect" color="pink" />
+            <TouchableWithoutFeedback onPress={pickImage}>
+              <View style={{ alignItems: "center", marginBottom: 20 }}>
+                {profilePhoto ? (
+                  <Image
+                    source={{ uri: profilePhoto }}
+                    style={{ width: 100, height: 100, borderRadius: 50 }}
+                  />
+                ) : (
+                  <View
+                    style={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: 50,
+                      backgroundColor: "#e1e1e1",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ color: "gray" }}>Upload Photo</Text>
+                  </View>
+                )}
+              </View>
+            </TouchableWithoutFeedback>
             <Input
               title="Username"
               value={username}
@@ -118,7 +164,7 @@ export default function SignupScreen({ navigation }) {
               secureTextEntry={true}
             />
             <Button title="Sign Up" onPress={onSignUp} />
-            <Text style={{ textAlign: "center", marginTop: 40 }}>
+            <Text style={{ textAlign: "center", marginTop: 40, marginBottom: 40}}>
               Already have an account?{" "}
               <Text
                 style={{ color: "pink" }}
@@ -127,9 +173,17 @@ export default function SignupScreen({ navigation }) {
                 Sign In
               </Text>
             </Text>
-          </View>
+          </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollView: {
+    flexGrow: 1,
+    paddingHorizontal: 16,
+    justifyContent: "center",
+  },
+});
