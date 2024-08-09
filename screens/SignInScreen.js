@@ -15,24 +15,34 @@ import Button from "../components/Button";
 import api from "../core/api";
 
 export default function SignInScreen({ navigation }) {
-  function onSignIn() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const onSignIn = () => {
     console.log("On Sign In", username, password);
 
-    //Check username
+    // Reset errors
+    setUsernameError("");
+    setPasswordError("");
+
+    // Check username and password
     const failUsername = !username;
+    const failPassword = !password;
+
     if (failUsername) {
       setUsernameError("Username not provided");
     }
-    //Check password
-    const failPassword = !password;
     if (failPassword) {
       setPasswordError("Password not provided");
     }
-    //Break out of this function if there were any issues
+    // Break out of this function if there were any issues
     if (failUsername || failPassword) {
       return;
     }
-    //Make signIn request
+
+    // Make sign-in request
     api({
       method: "POST",
       url: "/chat/signin/",
@@ -43,12 +53,22 @@ export default function SignInScreen({ navigation }) {
     })
       .then((response) => {
         console.log('Sign In:', response.data);
+        // Navigate to another screen or perform some action upon successful sign-in
       })
       .catch((error) => {
         if (error.response) {
+          // Handle response errors
           console.log(error.response.data);
           console.log(error.response.status);
           console.log(error.response.headers);
+          if (error.response.data.detail) {
+            // Set errors from response if available
+            if (error.response.data.detail.includes('Username')) {
+              setUsernameError(error.response.data.detail);
+            } else if (error.response.data.detail.includes('Password')) {
+              setPasswordError(error.response.data.detail);
+            }
+          }
         } else if (error.request) {
           console.log(error.request);
         } else {
@@ -56,18 +76,13 @@ export default function SignInScreen({ navigation }) {
         }
         console.log(error.config);
       });
-  }
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
-  }, []);
+  }, [navigation]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -81,14 +96,20 @@ export default function SignInScreen({ navigation }) {
               title="Username"
               value={username}
               error={usernameError}
-              setValue={setUsername}
+              setValue={(value) => {
+                setUsername(value);
+                if (value) setUsernameError(""); // Clear error when user types
+              }}
               setError={setUsernameError}
             />
             <Input
               title="Password"
               value={password}
               error={passwordError}
-              setValue={setPassword}
+              setValue={(value) => {
+                setPassword(value);
+                if (value) setPasswordError(""); // Clear error when user types
+              }}
               setError={setPasswordError}
               secureTextEntry={true}
             />
