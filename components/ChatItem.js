@@ -1,9 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 const ChatItem = ({ item, onPress }) => {
+
   return (
-    <TouchableOpacity style={styles.itemContainer} onPress={() => onPress(item)}>
+    <TouchableOpacity
+      style={styles.itemContainer}
+      onPress={() => onPress(item)}
+    >
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.lastMessage}>{item.lastMessage}</Text>
       <Text style={styles.timestamp}>

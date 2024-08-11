@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { AppNavigator } from "./navigation/AppNavigator";
-import * as SplashScreen from 'expo-splash-screen';
+import * as SplashScreen from "expo-splash-screen";
 import useFonts from "./hooks/useFonts";
-import './core/fontawesome'
+import "./core/fontawesome";
 import { DefaultTheme } from "react-native-paper";
+import { GlobalProvider } from "./globalContext";
 
 const LightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: 'white'
-  }
-}
+    background: "white",
+  },
+};
 
 function App() {
   const [isReady, setIsReady] = useState(false);
@@ -37,9 +38,11 @@ function App() {
   }
 
   return (
-    <NavigationContainer theme={LightTheme}>
-      <AppNavigator />
-    </NavigationContainer>
+    <GlobalProvider>
+      <NavigationContainer theme={LightTheme}>
+        <AppNavigator />
+      </NavigationContainer>
+    </GlobalProvider>
   );
 }
 

@@ -10,12 +10,11 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Title from "../components/Title";
 import * as ImagePicker from "expo-image-picker";
-import axios from "axios";
 
 export default function SignupScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -291,14 +290,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imagePlaceholderText: {
-    color: "gray",
+    color: "#a1a1a1",
+    fontSize: 14,
   },
   signInText: {
     textAlign: "center",
-    marginTop: 40,
-    marginBottom: 40,
+    marginTop: 20,
   },
   signInLink: {
-    color: "pink",
+    color: "#ff1493",
+    fontWeight: "bold",
   },
 });

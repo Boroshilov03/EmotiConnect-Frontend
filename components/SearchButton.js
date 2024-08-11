@@ -1,6 +1,6 @@
 import { View, TextInput, StyleSheet } from "react-native";
 import React, { useState } from "react";
-import EvilIcons from '@expo/vector-icons/EvilIcons';
+import EvilIcons from "@expo/vector-icons/EvilIcons";
 
 const SearchButton = () => {
   const [text, setText] = useState("");

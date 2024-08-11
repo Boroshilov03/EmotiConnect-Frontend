@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import ChatsScreen from "../screens/ChatsScreen";
 import ChatDetailScreen from "../screens/ChatDetailScreen";
@@ -9,12 +9,12 @@ import GiftsScreen from "../screens/GiftsScreen";
 import CallsScreen from "../screens/CallsScreen";
 import HomeScreen from "../screens/HomeScreen";
 import CalendarScreen from "../screens/CalendarScreen";
+import { GlobalContext } from "../globalContext";
 
 const Stack = createStackNavigator();
 
 export function AppNavigator() {
-  const [initialized] = useState(true);
-  const [authenticated] = useState(false);
+  const { initialized, authenticated } = useContext(GlobalContext);
 
   return (
     <Stack.Navigator>

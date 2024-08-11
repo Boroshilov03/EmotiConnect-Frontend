@@ -2,25 +2,26 @@ import {
   View,
   Text,
   SafeAreaView,
-  TextInput,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import Title from "../components/Title";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import api from "../core/api";
+import { GlobalContext } from "../globalContext";
 
 export default function SignInScreen({ navigation }) {
+  const { setAuthenticated, setUserObj, setToken } = useContext(GlobalContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
-  const onSignIn = () => {
+  const onSignIn = async () => {
     console.log("On Sign In", username, password);
 
     // Reset errors
@@ -42,40 +43,49 @@ export default function SignInScreen({ navigation }) {
       return;
     }
 
-    // Make sign-in request
-    api({
-      method: "POST",
-      url: "/chat/signin/",
-      data: {
-        username: username,
-        password: password,
-      },
-    })
-      .then((response) => {
-        console.log('Sign In:', response.data);
-        // Navigate to another screen or perform some action upon successful sign-in
-      })
-      .catch((error) => {
-        if (error.response) {
-          // Handle response errors
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-          if (error.response.data.detail) {
-            // Set errors from response if available
-            if (error.response.data.detail.includes('Username')) {
-              setUsernameError(error.response.data.detail);
-            } else if (error.response.data.detail.includes('Password')) {
-              setPasswordError(error.response.data.detail);
-            }
-          }
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log("Error", error.message);
-        }
-        console.log(error.config);
+    try {
+      // Make sign-in request
+      const response = await api({
+        method: "POST",
+        url: "/chat/signin/",
+        data: {
+          username: username,
+          password: password,
+        },
       });
+
+      console.log("Sign In:", response.data);
+      const { token, user } = response.data;
+
+      // Save tokens and user data
+      await setToken({ token, user });
+
+      // Update global state
+      setUserObj(user);
+      setAuthenticated(true);
+
+      Alert.alert("Success", "User signed in successfully!");
+    } catch (error) {
+      if (error.response) {
+        // Handle response errors
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        if (error.response.data.detail) {
+          // Set errors from response if available
+          if (error.response.data.detail.includes("Username")) {
+            setUsernameError(error.response.data.detail);
+          } else if (error.response.data.detail.includes("Password")) {
+            setPasswordError(error.response.data.detail);
+          }
+        }
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log("Error", error.message);
+      }
+      console.log(error.config);
+    }
   };
 
   useLayoutEffect(() => {
